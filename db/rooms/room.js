@@ -1,3 +1,5 @@
+'use strict';
+
 var mongoose = require('mongoose'),
   Schema = mongoose.Schema;
 
@@ -14,15 +16,22 @@ RoomSchema.methods.delete = function () {
 
 RoomSchema.pre('save', function (next) {
   if(this.name) return next();
-  let _n;
+
   let tryName = (function (n) {
     let name = generateName(n||"");
-    this.constructor.find({id: this.id, name: name})
+    return this.constructor.find({id: this.id, name: name})
       .then(result => {
-        if(result && result.length) return tryName((n||0) + 1);
-
+        if(result && result.length) return tryName((n||0) + 1).call(this);
+        return name;
       })
   }).bind(this);
+
+  tryName()
+    .then(name => {
+      this.name = name;
+      next();
+    })
+    .catch(next);
 
 });
 mongoose.model('Room', RoomSchema);
