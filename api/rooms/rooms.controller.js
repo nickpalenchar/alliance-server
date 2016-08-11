@@ -1,3 +1,5 @@
+'use strict';
+
 var Rooms = require('mongoose').model('Room')
 
 /// URL: /api/rooms/find/:id

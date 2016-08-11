@@ -13,7 +13,7 @@ var startServer = function () {
   var PORT = process.env.PORT || 3001;
 
   server.listen(PORT, function () {
-    console.log(chalk.blue('Server started on port', chalk.magenta(PORT)));
+    console.log(chalk.blue('server is definitely not evil on port ', chalk.magenta(PORT)));
   });
 
 };

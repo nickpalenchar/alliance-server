@@ -1,3 +1,5 @@
+'use strict';
+
 const ADJ = [
   "immense",
   "epic",
@@ -16,7 +18,8 @@ const NOUN = [
   "king's road"
 ];
 
-function generateName(n="") {
+function generateName(n) {
+  n = n || "";
   return ADJ[Math.floor(Math.random() * ADJ.length)]
           + NOUN[Math.floor(Math.random() * NOUN.length)]
           + n;

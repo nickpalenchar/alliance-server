@@ -4,7 +4,7 @@ var chalk = require('chalk');
 var DATABASE_URI = require('../env').DATABASE_URI;
 var mongoose = require('mongoose');
 
-var db = mongoose.db(DATABASE_URI).connection;
+var db = mongoose.connect(DATABASE_URI).connection;
 
 mongoose.promise = Promise;
 

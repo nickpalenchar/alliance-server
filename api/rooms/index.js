@@ -1,3 +1,5 @@
+'use strict';
+
 var rooms = require('express').Router();
 
 var controller = require('./rooms.controller');
