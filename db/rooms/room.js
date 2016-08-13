@@ -8,6 +8,7 @@ var generateName = require('../../helpers/words');
 var RoomSchema = new Schema({
   id: String,
   name: String,
+  players: [],
 });
 
 RoomSchema.methods.delete = function () {
