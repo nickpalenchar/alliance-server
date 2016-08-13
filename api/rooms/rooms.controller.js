@@ -7,6 +7,7 @@ var Rooms = require('mongoose').model('Room')
 module.exports.findOrCreate = function(req, res){
 
   let theStatus;
+  console.log("HELO")
 
   Rooms.find({ id: req.params.id })
     .then(result => {
