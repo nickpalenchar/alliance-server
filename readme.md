@@ -9,3 +9,10 @@ Returns all rooms of the `:id`. **And** if there are no rooms of the ID, automat
 
 **Returns:** \<Array\>Documents found, or newly created document.
 **Status:** 304 or 201, respectively.
+
+
+## Config
+
+### Cross-Origin-Requests
+Set cross origins on `env/` and import into `server.js` to set headers globally.
+
