@@ -22,16 +22,10 @@ RoomSchema.pre('save', function (next) {
   this.constructor.find({id: this.id})
     .then(rooms => {
       console.log("THE ROOMS; ", rooms);
-    });
-
-  let tryName = (function (n) {
-    let name = generateName(n||"", rooms);
-    return this.constructor.find({id: this.id, name: name})
-      .then(result => {
-        if(result && result.length) return tryName((n||0) + 1).call(this);
-        return name;
-      })
-  }).bind(this);
+      this.name = generateName(rooms);
+      next()
+    })
+    .catch(next);
 
   // tryName()
   //   .then(name => {

@@ -25,13 +25,18 @@ const NOUN = [
   // "ball"
 ];
 
-function generateName(n) {
-  console.log("N BEFORE", n);
-  n = n === 0 ? "-" + n : "";
-  console.log("N AFTER", n);
+function generateName(rooms) {
   var result = ADJ[Math.floor(Math.random() * ADJ.length)] + "-"
-          + NOUN[Math.floor(Math.random() * NOUN.length)]
-          + n;
+          + NOUN[Math.floor(Math.random() * NOUN.length)];
+
+  let first = true;
+  while(rooms.some(room => room.name === result)) {
+    if(first) {
+      result += '-';
+      first = !first;
+    }
+    result += Math.floor(Math.random() * 10);
+  }
   console.log("the resulttt ", result);
   return result;
 }
