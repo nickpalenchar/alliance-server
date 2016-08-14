@@ -10,6 +10,7 @@ var db = mongoose.connect(DATABASE_URI).connection;
 mongoose.Promise = Promise;
 
 require('./rooms/room');
+require('./players/player');
 
 var startDbPromise = new Promise(function (resolve, reject) {
   db.on('open', function () {
