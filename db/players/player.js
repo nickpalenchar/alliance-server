@@ -4,8 +4,8 @@ let mongoose = require('mongoose');
 let Schema = mongoose.Schema;
 
 let PlayerSchema = new Schema({
-  name: String,
-  id: String,
+  name: { type: String, required: true },
+  id: {type: String, required: true }
 });
 
 mongoose.model('Player', PlayerSchema);

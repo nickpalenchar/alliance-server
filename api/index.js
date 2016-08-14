@@ -6,5 +6,6 @@ router.get('/',function (req, res) {
 });
 
 router.use('/rooms', require('./rooms'));
+router.use('/players', require('./players'));
 
 module.exports = router;

@@ -2,7 +2,16 @@
 
 var Rooms = require('mongoose').model('Room');
 
-/// URL: /api/rooms/find/:id
+
+/// GET /api/rooms/find
+// returns all rooms
+module.exports.getAll = function (req, res) {
+  Rooms.find({})
+    .then(rooms => res.status(200).send(rooms));
+}
+
+
+/// GET: /api/rooms/find/:id
 // gets all rooms of the same id (from ip address) for user to join. Or creates the first one.
 module.exports.findOrCreate = function(req, res){
 
