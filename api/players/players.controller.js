@@ -1,5 +1,5 @@
 'use strict';
-
+let chalk = require('chalk');
 let Player = require('mongoose').model('Player');
 
 //// GET api/players/
@@ -14,6 +14,7 @@ module.exports.getAll = function(req, res) {
 ///// GET api/players/local/:id
 /// gets all players from the local room id. For validating on the front end if names are unique.
 module.exports.getLocal = function (req, res) {
+  console.log(chalk.red("[players.controller]") + " getting players in bldg#" + req.params.id);
   Player.find({id: req.params.id})
     .then(players => res.status(200).send(players))
     .catch(err => res.status(500).send(err));

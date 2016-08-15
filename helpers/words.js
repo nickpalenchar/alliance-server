@@ -2,27 +2,27 @@
 
 const ADJ = [
   "immense",
-  // "epic",
-  // "notorious",
-  // "evil",
-  // "vast",
-  // "noble",
-  // "holy",
-  // "magestic",
-  // "awesome",
-  // "ye-old"
+  "epic",
+  "notorious",
+  "evil",
+  "vast",
+  "noble",
+  "holy",
+  "magestic",
+  "awesome",
+  "ye-old"
 ];
 const NOUN = [
   "badlands",
-  // "road",
-  // "sword",
-  // "wall",
-  // "king's-road",
-  // "camelot",
-  // "resistance",
-  // "knights",
-  // "festival",
-  // "ball"
+  "road",
+  "sword",
+  "wall",
+  "king's-road",
+  "camelot",
+  "resistance",
+  "knights",
+  "festival",
+  "ball"
 ];
 
 function generateName(rooms) {
