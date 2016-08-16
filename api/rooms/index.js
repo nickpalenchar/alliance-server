@@ -9,6 +9,8 @@ rooms.get('/', devAuth, controller.getAll);
 
 rooms.get('/find/:id', controller.findOrCreate);
 
-rooms.post('/', controller.createRoom)
+rooms.post('/', controller.createRoom);
+
+rooms.post('/player/:id', controller.addPlayerToRoom);
 
 module.exports = rooms;
