@@ -9,6 +9,7 @@ var RoomSchema = new Schema({
   id: String,
   name: String,
   players: [],
+  active: { type: Boolean, default: false }
 });
 
 RoomSchema.methods.delete = function () {
@@ -26,13 +27,6 @@ RoomSchema.pre('save', function (next) {
       next()
     })
     .catch(next);
-
-  // tryName()
-  //   .then(name => {
-  //     this.name = name;
-  //     next();
-  //   })
-  //   .catch(next);
 
 });
 mongoose.model('Room', RoomSchema);
