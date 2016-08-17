@@ -16,3 +16,5 @@ Returns all rooms of the `:id`. **And** if there are no rooms of the ID, automat
 ### Cross-Origin-Requests
 Set cross origins on `env/` and import into `server.js` to set headers globally.
 
+NEXT THING:
+- socket emmission when a new player is added to a room.
