@@ -3,6 +3,7 @@ var mongoose = require('mongoose');
 var Rooms = mongoose.model('Room');
 var Players = mongoose.model('Player');
 var _ = require('lodash');
+var Promise = require('bluebird');
 
 
 /// GET /api/rooms/find
@@ -13,8 +14,18 @@ module.exports.getAll = function (req, res) {
 };
 
 
+///// GET /api/rooms/one/:id
+// gets a room of the MONGOOSE ID
+
+module.exports.getOne = function(req, res ){
+  Rooms.findOne({_id: req.params.id})
+    .then(room => res.status(200).send(room))
+    .catch(err => res.status(err.statusCode || 500).send(err))
+};
+
 /// GET: /api/rooms/find/:id
 // gets all rooms of the same id (from ip address) for user to join. Or creates the first one.
+// !! returns an ARRAY if the rooms are old, otherwise an OBJECT if it created a new one.
 module.exports.findOrCreate = function(req, res){
 
   let theStatus;
