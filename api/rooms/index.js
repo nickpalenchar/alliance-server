@@ -15,4 +15,6 @@ rooms.post('/', controller.createRoom);
 
 rooms.post('/player/:id', controller.addPlayerToRoom);
 
+rooms.post('/player/:id/delete', controller.deletePlayerFromRoom);
+
 module.exports = rooms;

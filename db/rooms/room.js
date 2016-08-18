@@ -9,7 +9,8 @@ var RoomSchema = new Schema({
   id: String,
   name: String,
   players: [],
-  active: { type: Boolean, default: false }
+  active: { type: Boolean, default: false },
+  admin: Object,
 });
 
 RoomSchema.methods.delete = function () {

@@ -4,7 +4,7 @@ var Rooms = mongoose.model('Room');
 var Players = mongoose.model('Player');
 var _ = require('lodash');
 var Promise = require('bluebird');
-
+var chalk = require('chalk');
 
 /// GET /api/rooms/find
 // returns all rooms
@@ -24,6 +24,7 @@ module.exports.getOne = function(req, res ){
 };
 
 /// GET: /api/rooms/find/:id
+// @user: the _id of the user making the request. Will assign to admin if a new room is created!
 // gets all rooms of the same id (from ip address) for user to join. Or creates the first one.
 // !! returns an ARRAY if the rooms are old, otherwise an OBJECT if it created a new one.
 module.exports.findOrCreate = function(req, res){
@@ -40,7 +41,8 @@ module.exports.findOrCreate = function(req, res){
       else {
         theStatus = 201;
         return Rooms.create({
-          id: req.params.id
+          id: req.params.id,
+          admin: req.body.user,
         })
       }
     })
@@ -70,7 +72,16 @@ module.exports.addPlayerToRoom = function (req, res) {
     room: Rooms.findOne({_id: req.body.roomId })
   })
     .then(doc => {
+      if(!doc.room.players.every(player => {
+        console.log(player._id.toString(), doc.player._id.toString());
+        return player._id.toString() !== doc.player._id.toString();
+        })) return doc.room;
+
       doc.room.players.push(doc.player);
+      if(!doc.room.admin) {
+        doc.room.admin = doc.player;
+        doc.room.markModified('admin');
+      }
       doc.room.markModified('players');
       return doc.room.save();
     })
@@ -79,16 +90,29 @@ module.exports.addPlayerToRoom = function (req, res) {
 };
 
 ///// DELETE: /api/rooms/player/:id
+/// :id: the mongoose _id of the PLAYER
+/// @roomId: the mongoose _id of the ROOM
 module.exports.deletePlayerFromRoom = function (req, res) {
   return Promise.props({
-    player: Players.findOne({_id: req.body.playerId }),
-    room: Rooms.findOne({_id: req.params.id })
+    player: Players.findOne({_id: req.params.id }),
+    room: Rooms.findOne({_id: req.body.roomId })
   })
     .then(doc => {
-      doc.room.players = _.remove(doc.room.players, item => (item._id === doc.player._id ));
+      doc.room.players = _.filter(doc.room.players, item => item._id.toString() !== doc.player._id.toString() );
       doc.room.markModified('players');
+
+      if(doc.room.admin._id.toString() === doc.player._id.toString()) {
+        console.log("REEMOVING ADMIN");
+        doc.room.admin = null;
+        if(doc.room.players.length) doc.room.admin = doc.room.players[0];
+        doc.room.markModified('admin');
+      }
+
       return doc.room.save();
     })
     .then(updatedRoom => res.status(200).send(updatedRoom))
-    .catch(err => res.status(err.errorCode || 500).send(err));
+    .catch(err => {
+      console.log(chalk.red(err));
+      res.status(err.errorCode || 500).send(err)
+    });
 };
