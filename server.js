@@ -1,5 +1,6 @@
 var server = require('express')();
 var http = require('http').Server(server);
+var io = require('socket.io')(http);
 var chalk = require('chalk');
 var bodyParser = require('body-parser');
 

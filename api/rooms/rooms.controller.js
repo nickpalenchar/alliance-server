@@ -5,6 +5,9 @@ var Players = mongoose.model('Player');
 var _ = require('lodash');
 var Promise = require('bluebird');
 var chalk = require('chalk');
+var events = require('events');
+var eventEmitter = new events.EventEmitter();
+
 
 /// GET /api/rooms/find
 // returns all rooms
