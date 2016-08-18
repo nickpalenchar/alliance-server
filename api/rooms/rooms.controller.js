@@ -12,8 +12,6 @@ var eventEmitter = new events.EventEmitter();
 /// GET /api/rooms/find
 // returns all rooms
 module.exports.getAll = function (req, res) {
-  console.log("emittine");
-  eventEmitter.broadcast("test");
   Rooms.find({})
     .then(rooms => res.status(200).send(rooms));
 };
