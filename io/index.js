@@ -14,7 +14,7 @@ module.exports = function (server) {
 
   io = socketio(server);
 
-  io.on('connection', function () {
+  io.on('connection', function (io) {
     console.log("connecteddddd");
 
     io.emit("test");
