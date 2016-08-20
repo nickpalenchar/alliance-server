@@ -26,11 +26,7 @@ module.exports = function (server) {
         return;
       }
       socket.join(room);
-      socket.emit('test', 'standard test');
-      io.sockets.emit('test', 'FROM ALL');
       io.sockets.to(room).emit('test', "THIS IS THE ROOOM");
-      socket.to("nonexistantroom").emit("err", "you should not have gotten this");
-      console.log("THE ROOML?", socket.room);
     });
 
     socket.on('send-test', function () {
@@ -46,18 +42,17 @@ module.exports = function (server) {
     //// rooms _id used for each room.
 
     socket.on("update-players", function (room, players) {
-      socket.in(room).emit("update-players", players);
+      io.sockets.in(room).emit("update-players", players);
     });
 
-    socket.on("remove-player", function (room, player) {
-      console.log("teste workeddd")
+    socket.on("remove-player", function (room, playerId) {
+      io.sockets.in(room).emit("remove-player", playerId);
     });
 
     socket.on('disconnect',function () {
       console.log("discennected");
     })
   });
-
 
   return io;
 
