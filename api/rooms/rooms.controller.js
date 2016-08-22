@@ -92,6 +92,22 @@ module.exports.addPlayerToRoom = function (req, res) {
     .catch(err => res.status(err.errorCode || 500).send(err));
 };
 
+////// POST api/rooms/options/:id
+/// update the options. Body shold be key of the options to update
+// note: options sent as stringified json so that bools are not converted into strings.
+module.exports.updateOptions = function (req, res) {
+  let options = JSON.parse(req.body.options);
+  return Rooms.findOne({_id: req.params.id})
+    .then(room => {
+      console.log("THE NEW OPTIOS", options);
+      room.options = Object.assign({},room.options, options);
+      room.markModified("options");
+      return room.save();
+    })
+    .then(room => res.status(200).send(room))
+    .catch(err => res.status(err.statusCode || 500).send(err));
+};
+
 ///// DELETE: /api/rooms/player/:id
 /// :id: the mongoose _id of the PLAYER
 /// @roomId: the mongoose _id of the ROOM

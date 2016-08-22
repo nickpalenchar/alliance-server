@@ -4,6 +4,7 @@ var io = null;
 var events = require('events');
 var chalk = require('chalk');
 var eventEmitter = new events.EventEmitter();
+var assignRoles = require('./gameStart');
 
 eventEmitter.on("test", function(){
   console.log("TEST WORKED");
@@ -47,6 +48,11 @@ module.exports = function (server) {
     socket.on("remove-player", function (room, playerId) {
       console.log("triggered ", room, playerId);
       io.sockets.in(room).emit("remove-player", playerId);
+    });
+
+    socket.on("start-game", function (room, options, numPlayers) {
+      var info = assignRoles(options, numPlayers);
+      io.sockets.in(room).emit("start-game", info);
     });
 
     socket.on('disconnect',function () {

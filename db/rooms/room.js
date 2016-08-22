@@ -5,13 +5,27 @@ var mongoose = require('mongoose'),
 
 var generateName = require('../../helpers/words');
 
+var optionsObject = {
+  specialCharacters: false,
+  merlin: true,
+  percival: true,
+  assassin: true,
+  mordred: true,
+  morgana: true,
+  oberon: false,
+  maxPlayers: 10,
+};
+
 var RoomSchema = new Schema({
   id: String,
   name: String,
   players: [],
   active: { type: Boolean, default: false },
   admin: Object,
+  options: {type: Object, default: optionsObject }
 });
+
+
 
 RoomSchema.methods.delete = function () {
   return this.remove();
