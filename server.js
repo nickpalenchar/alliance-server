@@ -22,6 +22,10 @@ server.use('/', function (req, res, next) {
   next();
 });
 
+server.get('/', function (req, res) {
+  res.status(403).send("Hey get outta here!")
+})
+
 server.use('/api', require('./api'));
 
 module.exports = server;
