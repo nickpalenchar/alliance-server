@@ -15,6 +15,7 @@ server.use('/', function (req, res, next) {
   console.log("--- NEW REQUEST ---");
   console.log(chalk.bold(chalk.yellow(req.method)) + chalk.magenta(" " + req.path))
   console.log(chalk.bold(chalk.gray("BODY: ")) + (JSON.stringify(req.body)));
+  console.log("IP ADDRESS", req.ip);
 
   /// global custom headers ///
   res.setHeader('Access-Control-Allow-Origin', FRONTEND_ORIGIN);
@@ -24,7 +25,7 @@ server.use('/', function (req, res, next) {
 
 server.get('/', function (req, res) {
   res.status(403).send("Hey get outta here!")
-})
+});
 
 server.use('/api', require('./api'));
 
