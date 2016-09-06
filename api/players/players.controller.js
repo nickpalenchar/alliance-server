@@ -27,6 +27,7 @@ module.exports.getLocal = function (req, res) {
 module.exports.newUser = function(req, res) {
   let id = req.body.id;
   let name = req.body.name;
+  console.log("N", name, "ID", id);
   Player.find({id, name})
     .then(result => {
       if (!result.length)
