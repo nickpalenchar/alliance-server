@@ -75,6 +75,9 @@ module.exports.addPlayerToRoom = function (req, res) {
     room: Rooms.findOne({_id: req.body.roomId })
   })
     .then(doc => {
+
+      if(doc.room.options.maxPlayers === doc.room.players.length) throw new Error("Room Full");
+
       if(!doc.room.players.every(player => {
         console.log(player._id.toString(), doc.player._id.toString());
         return player._id.toString() !== doc.player._id.toString();

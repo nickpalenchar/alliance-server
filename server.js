@@ -29,4 +29,15 @@ server.get('/', function (req, res) {
 
 server.use('/api', require('./api'));
 
+server.get('/ip', function (req, res) {
+  var roomNumber = req.ip.toString().replace(/:/g,"c");
+  var ip = req.headers['x-forwarded-for'] ||
+    req.connection.remoteAddress ||
+    req.socket.remoteAddress ||
+    req.connection.socket.remoteAddress;
+  console.log(ip);
+  console.log(roomNumber);
+  res.status(200).send(roomNumber);
+});
+
 module.exports = server;
