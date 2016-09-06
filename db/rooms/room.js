@@ -21,6 +21,7 @@ var RoomSchema = new Schema({
   name: String,
   players: [],
   active: { type: Boolean, default: false },
+  info: Object,
   admin: Object,
   options: {type: Object, default: optionsObject }
 });
