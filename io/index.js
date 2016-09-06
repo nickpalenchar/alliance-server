@@ -6,6 +6,8 @@ var chalk = require('chalk');
 var eventEmitter = new events.EventEmitter();
 var assignRoles = require('./gameStart');
 
+var Room = require('mongoose').model('Room');
+
 eventEmitter.on("test", function(){
   console.log("TEST WORKED");
 });
@@ -51,8 +53,17 @@ module.exports = function (server) {
     });
 
     socket.on("start-game", function (room, options, numPlayers) {
+      console.log("ROOM: ", room);
       var info = assignRoles(options, numPlayers);
       io.sockets.in(room).emit("start-game", info);
+
+      Room.findOne({_id: room})
+        .then(roomDoc => {
+          roomDoc.active = true;
+          roomDoc.info = info;
+          return roomDoc.save();
+        })
+
     });
 
     socket.on('disconnect',function () {
