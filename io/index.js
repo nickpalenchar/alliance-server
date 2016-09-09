@@ -52,6 +52,11 @@ module.exports = function (server) {
       io.sockets.in(room).emit("remove-player", playerId);
     });
 
+    socket.on("update-room", function (room, roomObj) {
+      io.sockets.in(room).emit("update-room", roomObj);
+      socket.emit("update-room", roomObj);
+    });
+
     socket.on("start-game", function (room, options, numPlayers) {
       console.log("ROOM: ", room);
       var info = assignRoles(options, numPlayers);
