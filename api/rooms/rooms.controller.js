@@ -57,7 +57,10 @@ module.exports.findOrCreate = function(req, res){
 ///// POST: /api/rooms/
 
 module.exports.createRoom = function(req, res){
-  Rooms.create({id: req.body.id })
+  Rooms.create({
+    id: req.body.id,
+    admin: req.body.user
+  })
     .then(room => res.status(201).send(room))
     .catch(err => res.status(500).send(err));
 };

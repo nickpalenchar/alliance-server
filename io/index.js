@@ -43,8 +43,9 @@ module.exports = function (server) {
     //// rooms _id used for each room.
 
     socket.on("update-players", function (room, players) {
-      console.log("got update players, emittin ", players)
+      console.log("got update players, emittin ", players);
       io.sockets.in(room).emit("update-players", players);
+      io.sockets.in("ROOM_SELECTION").emit("update-players", room, players);
     });
 
     socket.on("remove-player", function (room, playerId) {
@@ -54,7 +55,10 @@ module.exports = function (server) {
 
     socket.on("update-room", function (room, roomObj) {
       io.sockets.in(room).emit("update-room", roomObj);
-      socket.emit("update-room", roomObj);
+      io.sockets.in("ROOM_SELECTION").emit("update-room", roomObj);
+    });
+    socket.on("new-room", function(roomObj){
+      io.sockets.in("ROOM_SELECTION").emit("new-room", roomObj);
     });
 
     socket.on("start-game", function (room, options, numPlayers) {
