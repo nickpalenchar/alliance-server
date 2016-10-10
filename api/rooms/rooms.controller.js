@@ -37,7 +37,7 @@ module.exports.findOrCreate = function(req, res){
   Rooms.find({ id: req.params.id })
     .then(result => {
       console.log("[rooms.controller] the result: ", result);
-      if(result.length) {
+      if(result.length && result.every(room => !room.active)) {
         theStatus = 200;
         return result
       }
