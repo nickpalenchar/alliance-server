@@ -1,18 +1,20 @@
 'use strict';
 
+var DAY = require('../../helpers/time.values').DAY;
+
 var mongoose = require('mongoose'),
   Schema = mongoose.Schema;
 
 var generateName = require('../../helpers/words');
 
 var optionsObject = {
-  specialCharacters: false,
+  specialCharacters: true,
   merlin: true,
   percival: true,
   assassin: true,
   mordred: true,
   morgana: true,
-  oberon: false,
+  oberon: true,
   maxPlayers: 10,
 };
 
@@ -23,7 +25,8 @@ var RoomSchema = new Schema({
   active: { type: Boolean, default: false },
   info: Object,
   admin: Object,
-  options: {type: Object, default: optionsObject }
+  options: {type: Object, default: optionsObject },
+  creationDate: {type: Date, default: Date.now }
 });
 
 

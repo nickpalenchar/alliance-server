@@ -12,4 +12,6 @@ players.get('/local/:id', controller.getLocal);
 
 players.post('/', controller.newUser);
 
+players.post('/delete', controller.deleteUser);
+
 module.exports = players;

@@ -37,6 +37,11 @@ module.exports.newUser = function(req, res) {
     .catch(err => res.status(400).send("Error: user with same name and id exists"));
 };
 
+///// DELETE api/players/delete
+// @name
+// @code
 module.exports.deleteUser = function (req, res) {
-  
+  console.log(chalk.red("delete request ") + chalk.blue(req.body));
+  return Player.remove({name: req.body.name, code: req.body.code})
+    .then(result => res.status(200).send(result));
 };

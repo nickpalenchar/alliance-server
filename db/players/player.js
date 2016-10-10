@@ -9,7 +9,8 @@ let generateCode = require('../../helpers/hash');
 let PlayerSchema = new Schema({
   name: { type: String, required: true },
   id: {type: String, required: true },
-  code: { "type": String, "default": generateCode }
+  code: { "type": String, "default": generateCode },
+  creationDate: {type: Date, default: Date.now }
 });
 
 PlayerSchema.methods.clean = function () {
