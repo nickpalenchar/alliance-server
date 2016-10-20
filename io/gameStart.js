@@ -15,12 +15,12 @@ module.exports = function (options, players) {
       {alliance: "good", character: "", _id: null, player: null},
       {alliance: "good", character: "", _id: null, player: null},
       {alliance: "evil", character: "", _id: null, player: null},
-    ]
+    ].slice(0, players.length)
   };
 
   for(var k in options) {
     if(!options.hasOwnProperty(k)) continue;
-    if(k === "maxPlayers" || k === "specialPlayers") continue;
+    if(k === "maxPlayers" || k === "specialPlayers" || k === "specialCharacters") continue;
 
     if(options[k]) assignCharacter(info.characters, k);
   }

@@ -13,7 +13,7 @@ server.use('/', function (req, res, next) {
 
   // server logging //
   console.log("--- NEW REQUEST ---");
-  console.log(chalk.bold(chalk.yellow(req.method)) + chalk.magenta(" " + req.path))
+  console.log(chalk.bold(chalk.yellow(req.method)) + chalk.magenta(" " + req.path));
   console.log(chalk.bold(chalk.gray("BODY: ")) + (JSON.stringify(req.body)));
   console.log("IP ADDRESS", req.ip);
 
