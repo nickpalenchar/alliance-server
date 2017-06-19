@@ -19,4 +19,7 @@ rooms.post('/player/:id/delete', controller.deletePlayerFromRoom);
 
 rooms.post('/options/:id', controller.updateOptions);
 
+// Morgana update - get guest room.
+rooms.get('/waiting/:id', controller.findOrCreateWaiting)
+
 module.exports = rooms;

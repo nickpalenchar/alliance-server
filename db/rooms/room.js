@@ -29,7 +29,12 @@ var RoomSchema = new Schema({
   creationDate: {type: Date, default: Date.now }
 });
 
-
+var WaitingRoomSchema = new Schema({
+  id: String,
+  name: {type: String, default: "WAITINGROOM"},
+  guests: []
+})
+// @TODO Add hook to auto remove guests older than 30 minutes
 
 RoomSchema.methods.delete = function () {
   return this.remove();
@@ -37,8 +42,6 @@ RoomSchema.methods.delete = function () {
 
 RoomSchema.pre('save', function (next) {
   if(this.name) return next();
-
-  console.log("DOC ", this.id);
   this.constructor.find({id: this.id})
     .then(rooms => {
       console.log("THE ROOMS; ", rooms);
@@ -46,6 +49,6 @@ RoomSchema.pre('save', function (next) {
       next()
     })
     .catch(next);
-
 });
 mongoose.model('Room', RoomSchema);
+mongoose.model('WaitingRoom', WaitingRoomSchema)
