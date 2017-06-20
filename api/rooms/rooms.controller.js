@@ -59,17 +59,17 @@ module.exports.findOrCreate = function(req, res){
 // MORGANA version
 // GET: api/rooms/waiting/:id
 // Will always return an object. !! this route has side effects!
-module.exports.findOrCreate = function(req, res){
+module.exports.findOrCreateWaiting = function(req, res){
   let theStatus;
 
   Rooms.find({ id: req.params.id, name: "WAITINGROOM" })
     .then(result => {
       console.log("[rooms.controller] the result: ", result);
       //check if there is a room active
-      if(result.length)) {
+      if(result.length) {
         console.log(chalk.green("RETURNING JUST RESULT"));
         theStatus = 200;
-        return result
+        return result[0]; // because a single room is an array of 1, get just the result
       }
       else {
         theStatus = 201;
@@ -79,8 +79,8 @@ module.exports.findOrCreate = function(req, res){
         })
       }
     })
-    .then(rooms => {
-      res.status(theStatus).send(rooms);
+    .then(waitingRoom => {
+      res.status(theStatus).send(waitingRoom);
     });
 };
 
