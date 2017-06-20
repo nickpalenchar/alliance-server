@@ -31,7 +31,6 @@ var RoomSchema = new Schema({
 
 var WaitingRoomSchema = new Schema({
   id: String,
-  name: {type: String, default: "WAITINGROOM"},
   guests: []
 })
 // @TODO Add hook to auto remove guests older than 30 minutes

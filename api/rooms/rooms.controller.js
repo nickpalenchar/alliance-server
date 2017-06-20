@@ -1,6 +1,7 @@
 'use strict';
 var mongoose = require('mongoose');
 var Rooms = mongoose.model('Room');
+var WaitingRooms = mongoose.model('WaitingRoom');
 var Players = mongoose.model('Player');
 var _ = require('lodash');
 var Promise = require('bluebird');
@@ -57,17 +58,15 @@ module.exports.findOrCreate = function(req, res){
 
 
 // MORGANA version
-// GET: api/rooms/waiting/:id
-// Will always return an object. !! this route has side effects!
+// GET: api/rooms/guest/:id
+// Will always return an object.
 module.exports.findOrCreateWaiting = function(req, res){
   let theStatus;
-
-  Rooms.find({ id: req.params.id, name: "WAITINGROOM" })
+  WaitingRooms.find({ id: req.params.id })
     .then(result => {
       console.log("[rooms.controller] the result: ", result);
       //check if there is a room active
       if(result.length) {
-        console.log(chalk.green("RETURNING JUST RESULT"));
         theStatus = 200;
         return result[0]; // because a single room is an array of 1, get just the result
       }
@@ -75,7 +74,6 @@ module.exports.findOrCreateWaiting = function(req, res){
         theStatus = 201;
         return Rooms.create({
           id: req.params.id,
-          name: "WAITINGROOM",
         })
       }
     })
