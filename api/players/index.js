@@ -14,4 +14,7 @@ players.post('/', controller.newUser);
 
 players.post('/delete', controller.deleteUser);
 
+// MORGANA BUILD: players not yet signed to a room is a guest of the building
+
+
 module.exports = players;
