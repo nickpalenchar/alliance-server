@@ -72,7 +72,7 @@ module.exports.findOrCreateWaiting = function(req, res){
       }
       else {
         theStatus = 201;
-        return Rooms.create({
+        return WaitingRooms.create({
           id: req.params.id,
         })
       }

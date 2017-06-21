@@ -1,6 +1,8 @@
 'use strict';
 let chalk = require('chalk');
-let Player = require('mongoose').model('Player');
+let mongoose = require('mongoose');
+let Player = mongoose.model('Player');
+let WaitingRoom = mongoose.model('WaitingRoom');
 let _ = require('lodash');
 //// GET api/players/
 // *** Requires Auth **, gets all playres
@@ -39,9 +41,24 @@ module.exports.newUser = function(req, res) {
     .catch(err => res.status(400).send("Error: user with same name and id exists"));
 };
 
-///// DELETE api/players/delete
+
+//// DELETE api/players/guest/:id
+
+module.exports.deleteGuest = function (res, req) {
+
+  return WaitingRoom.find({id: req.params.id})
+    .then(rooms => {
+      let room = rooms[0];
+      room.guests = _.filter(room.guests, o => o.name !== req.body.id);
+      return room.guests.save();
+    })
+    .then(result => res.status(200).send(result));
+
+};
+///// POST api/players/delete
 // @name
 // @code
+// @TODO: Deprecated - use DELETE api/rooms/waiting/:id with body=name instead
 module.exports.deleteUser = function (req, res) {
   console.log(chalk.red("delete request ") + chalk.blue(req.body));
   return Player.remove({name: req.body.name, code: req.body.code})
