@@ -31,26 +31,35 @@ module.exports.getLocal = function (req, res) {
 module.exports.newUser = function(req, res) {
   let id = req.body.id;
   let name = req.body.name;
-  Player.find({id, name})
-    .then(result => {
-      if (!result.length)
-        return Player.create({ name, id});
-      else throw new Error("duplicate");
+  let theWaitingRoom;
+  let theCreatedplayer;
+  WaitingRoom.find({id})
+    .then(waitingRoom => {
+      theWaitingRoom = waitingRoom[0];
+      if(theWaitingRoom.guests.some(o => o.name === req.body.name)) {
+        throw new Error("duplicate");
+      }
+      else return Player.create({name, id})
     })
-    .then(createdPlayer => res.status(201).send(createdPlayer))
+    .then(createdPlayer => {
+      theCreatedplayer = createdPlayer;
+      theWaitingRoom.guests.push(theCreatedplayer);
+      return theWaitingRoom.save();
+    })
+    .then(waitingRoom => res.status(201).send(theCreatedplayer))
     .catch(err => res.status(400).send("Error: user with same name and id exists"));
 };
 
 
-//// DELETE api/players/guest/:id
+//// POST api/players/remove/guest/:id
 
-module.exports.deleteGuest = function (res, req) {
+module.exports.deleteGuest = function (req, res) {
 
-  return WaitingRoom.find({id: req.params.id})
+  return WaitingRoom.find({id: req.body.roomId})
     .then(rooms => {
       let room = rooms[0];
-      room.guests = _.filter(room.guests, o => o.name !== req.body.id);
-      return room.guests.save();
+      room.guests = _.filter(room.guests, o => o.name !== req.params.id);
+      return room.save();
     })
     .then(result => res.status(200).send(result));
 
