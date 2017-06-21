@@ -1,6 +1,8 @@
 'use strict';
 let chalk = require('chalk');
-let Player = require('mongoose').model('Player');
+let mongoose = require('mongoose');
+let Player = mongoose.model('Player');
+let WaitingRoom = mongoose.model('WaitingRoom');
 let _ = require('lodash');
 //// GET api/players/
 // *** Requires Auth **, gets all playres
@@ -29,19 +31,43 @@ module.exports.getLocal = function (req, res) {
 module.exports.newUser = function(req, res) {
   let id = req.body.id;
   let name = req.body.name;
-  Player.find({id, name})
-    .then(result => {
-      if (!result.length)
-        return Player.create({ name, id});
-      else throw new Error("duplicate");
+  let theWaitingRoom;
+  let theCreatedplayer;
+  WaitingRoom.find({id})
+    .then(waitingRoom => {
+      theWaitingRoom = waitingRoom[0];
+      if(theWaitingRoom.guests.some(o => o.name === req.body.name)) {
+        throw new Error("duplicate");
+      }
+      else return Player.create({name, id})
     })
-    .then(createdPlayer => res.status(201).send(createdPlayer))
+    .then(createdPlayer => {
+      theCreatedplayer = createdPlayer;
+      theWaitingRoom.guests.push(theCreatedplayer);
+      return theWaitingRoom.save();
+    })
+    .then(waitingRoom => res.status(201).send(theCreatedplayer))
     .catch(err => res.status(400).send("Error: user with same name and id exists"));
 };
 
-///// DELETE api/players/delete
+
+//// POST api/players/remove/guest/:id
+
+module.exports.deleteGuest = function (req, res) {
+
+  return WaitingRoom.find({id: req.body.roomId})
+    .then(rooms => {
+      let room = rooms[0];
+      room.guests = _.filter(room.guests, o => o.name !== req.params.id);
+      return room.save();
+    })
+    .then(result => res.status(200).send(result));
+
+};
+///// POST api/players/delete
 // @name
 // @code
+// @TODO: Deprecated - use DELETE api/rooms/waiting/:id with body=name instead
 module.exports.deleteUser = function (req, res) {
   console.log(chalk.red("delete request ") + chalk.blue(req.body));
   return Player.remove({name: req.body.name, code: req.body.code})
