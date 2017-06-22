@@ -17,7 +17,7 @@ module.exports.getAll = function(req, res) {
 /// gets all players from the local room id. For validating on the front end if names are unique.
 ///@TODO: DEPRECATED. Delete 30 days after Morgana release
 module.exports.getLocal = function (req, res) {
-  console.log(chalk.red("[players.controller] DEPRECATION NOTICE - use /api/rooms/guest/:id instead"))
+  console.log(chalk.red("[players.controller] DEPRECATION NOTICE - use /api/rooms/guest/:id instead"));
   console.log(chalk.red("[players.controller]") + " getting players in bldg#" + req.params.id);
   Player.find({id: req.params.id})
     .then(players => res.status(200).send(players.map(player => _.pick(player, ['name', 'id']))))
