@@ -62,7 +62,7 @@ module.exports = function (server) {
       io.sockets.in("ROOM_SELECTION").emit("new-room", roomObj);
     });
 
-    socket.on("start-game", function (room, options, players) {
+    socket.on("start-game", function (room, options, players, roomId) {
       console.log("PLAYERS: ", players);
       var info = assignRoles(options, players);
 
@@ -70,12 +70,24 @@ module.exports = function (server) {
 
       io.sockets.in(room).emit("start-game", info);
 
-      let theRoom;
+      WaitingRoom.findOne({id: roomId})
+        .then(waitingRoom => {
+          console.log("THE PLAYERS ", players, "\nTHE WAITING ROOM ", waitingRoom, "\nTHE WAITING ROOM GUESTS ARRAY ", waitingRoom.guests);
+          let playerIds = players.map(player => player.id);
+          console.log("player idddss ", playerIds);
+          waitingRoom.guests = waitingRoom.guests.filter(guest => {
+            console.log("guestt in iteration ", guest);
+            console.log("inclued the id? ", playerIds.includes(guest));
+            !playerIds.includes(guest)
+          });
+          console.log("NEW WAITING ROOM GUESTS", waitingRoom);
+          return waitingRoom.save();
+        });
+
       Room.findOne({_id: room})
         .then(roomDoc => {
           roomDoc.active = true;
           roomDoc.info = info;
-          theRoom = roomDoc;
           return roomDoc.save();
         });
         //.then(() => WaitingRoom.findOne({id: room}))
