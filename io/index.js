@@ -1,13 +1,14 @@
 'use strict';
-var socketio = require('socket.io');
-var io = null;
-var events = require('events');
-var chalk = require('chalk');
-var eventEmitter = new events.EventEmitter();
-var assignRoles = require('./gameStart');
+let socketio = require('socket.io');
+let io = null;
+let events = require('events');
+let chalk = require('chalk');
+let eventEmitter = new events.EventEmitter();
+let assignRoles = require('./gameStart');
 
-var Room = require('mongoose').model('Room');
-
+let mongoose = require('mongoose');
+let Room = mongoose.model('Room');
+let WaitingRoom = mongoose.model('WaitingRoom');
 eventEmitter.on("test", function(){
   console.log("TEST WORKED");
 });
@@ -61,17 +62,35 @@ module.exports = function (server) {
       io.sockets.in("ROOM_SELECTION").emit("new-room", roomObj);
     });
 
-    socket.on("start-game", function (room, options, numPlayers) {
-      console.log("ROOM: ", room);
-      var info = assignRoles(options, numPlayers);
+    socket.on("start-game", function (room, options, players, roomId) {
+      console.log("PLAYERS: ", players);
+      var info = assignRoles(options, players);
+
+      console.log("INFOOO?? ", info); // TODO IF PLAYER IDS ARE INCLUDED USE THIS
+
       io.sockets.in(room).emit("start-game", info);
+
+      WaitingRoom.findOne({id: roomId})
+        .then(waitingRoom => {
+          console.log("THE PLAYERS ", players, "\nTHE WAITING ROOM ", waitingRoom, "\nTHE WAITING ROOM GUESTS ARRAY ", waitingRoom.guests);
+          let playerIds = players.map(player => player.id);
+          console.log("player idddss ", playerIds);
+          waitingRoom.guests = waitingRoom.guests.filter(guest => {
+            console.log("guestt in iteration ", guest);
+            console.log("inclued the id? ", playerIds.includes(guest));
+            !playerIds.includes(guest)
+          });
+          console.log("NEW WAITING ROOM GUESTS", waitingRoom);
+          return waitingRoom.save();
+        });
 
       Room.findOne({_id: room})
         .then(roomDoc => {
           roomDoc.active = true;
           roomDoc.info = info;
           return roomDoc.save();
-        })
+        });
+        //.then(() => WaitingRoom.findOne({id: room}))
 
     });
 
